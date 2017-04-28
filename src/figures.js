@@ -1,3 +1,7 @@
+function generateId() {
+	return new Date().getTime();
+}
+
 function Circle(px, py, r, color, id) {
 	this.px = px;
 	this.py = py;
@@ -7,9 +11,8 @@ function Circle(px, py, r, color, id) {
 }
 
 export function CirclesFactory() {
-	let count = 0;
 	return function (px, py, r, color) {
-		return new Circle(px, py, r, color, count++);
+		return new Circle(px, py, r, color, generateId());
 	}
 }
 
@@ -22,8 +25,7 @@ function Square(px, py, side, color, id) {
 }
 
 export function SquaresFactory() {
-	let count = 0;
 	return function (px, py, side, color) {
-		return new Square(px, py, side, color, count++);
+		return new Square(px, py, side, color, generateId());
 	}
 }

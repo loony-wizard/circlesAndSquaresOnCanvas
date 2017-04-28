@@ -1,30 +1,13 @@
 import { combineReducers } from "redux";
 
 import {
+	CIRCLES_LOADED,
+	SQUARES_LOADED,
 	ADD_CIRCLE,
 	ADD_SQUARE,
 	DELETE_CIRCLE,
 	DELETE_SQUARE
 } from './actions';
-
-import {
-	CirclesFactory,
-	SquaresFactory
-} from './figures';
-
-import {
-	randomInt,
-	randomColor
-} from './random';
-
-const CIRCLE_MIN_RADIUS = 15;
-const CIRCLE_MAX_RADIUS = 100;
-
-const SQUARE_MIN_SIDE = 20;
-const SQUARE_MAX_SIDE = 150;
-
-const createCircle = CirclesFactory();
-const createSquare = SquaresFactory();
 
 function deleteElementById(elements, elementId) {
 	const elementToDelete = elements.filter((el) => el.id === elementId)[0];
@@ -37,15 +20,18 @@ function deleteElementById(elements, elementId) {
 function circles(state = [], action) {
 	switch (action.type) {
 		case ADD_CIRCLE: {
-			const { px, py } = action.payload;
-			const r = randomInt(CIRCLE_MIN_RADIUS, CIRCLE_MAX_RADIUS);
-			const color = randomColor();
-			const newState = state.concat(createCircle(px, py, r, color));
+			const { circle } = action.payload;
+			const newState = state.concat(circle);
 			return newState;
 		}
 		case DELETE_CIRCLE: {
 			const { id } = action.payload;
 			return deleteElementById(state, id);
+		}
+		case CIRCLES_LOADED: {
+			const circles = JSON.parse(action.payload.jsonData);
+			const newState = state.concat(circles);
+			return newState;
 		}
 		default:
 			return state;
@@ -55,16 +41,19 @@ function circles(state = [], action) {
 function squares(state = [], action) {
 	switch (action.type) {
 		case ADD_SQUARE: {
-			const { px, py } = action.payload;
-			const side = randomInt(SQUARE_MIN_SIDE, SQUARE_MAX_SIDE);
-			const color = randomColor();
-			const newState = state.concat(createSquare(px, py, side, color));
+			const { square } = action.payload;
+			const newState = state.concat(square);
 			return newState;
 		}
 		case DELETE_SQUARE: {
 			const { id } = action.payload;
 			return deleteElementById(state, id);	
 		}
+        case SQUARES_LOADED: {
+            const squares = JSON.parse(action.payload.jsonData);
+            const newState = state.concat(squares);
+            return newState;
+        }
 		default:
 			return state;
 	}
